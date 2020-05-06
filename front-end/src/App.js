@@ -2,14 +2,39 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+function loadTweets(callback) {
+  const xhr = new XMLHttpRequest()
+  const method = 'GET' // "POST"
+  const url = "http://localhost:8000/api/tweets/"
+  const responseType = "json"
+  xhr.responseType = responseType
+  xhr.open(method, url)
+  xhr.onload = function() {
+    callback(xhr.response, xhr.status)
+  }
+  xhr.onerror = function (e) {
+    console.log(e)
+    callback({"message": "The request was an error"}, 400)
+  }
+  xhr.send()
+}
+
+
 function App() {
-  const [tweets, setTweets] = useState([{}])
+  const [tweets, setTweets] = useState([])
 
   useEffect(() => {
-    //Do lookup:
-    const tweetItems = [{"content": 123}, {"content": "Hello World!"}]
-    setTweets(tweetItems)
+    const myCallback = (response, status) => {
+      console.log(response, status)
+      if (status === 200){
+        setTweets(response)
+      } else {
+        alert("There was an error")
+      }
+    }
+    loadTweets(myCallback)
   }, [])
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,9 +43,9 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <p>
-          { tweets.map((tweet, index) => {
-            return <li>{ tweet.content }</li>
-          }) }
+          {tweets.map((tweet, index)=>{
+            return <li>{tweet.content}</li>
+          })}
         </p>
         <a
           className="App-link"
