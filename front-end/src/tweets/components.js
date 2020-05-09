@@ -1,23 +1,30 @@
 import React, {useEffect, useState}  from 'react'
 
-import {loadTweets} from '../lookup'
+import {createTweet, loadTweets} from '../lookup'
 
 export function TweetsComponent(props) {
-    const textAreaRef = React.createRef()
-    const [newTweets, setNewTweets] = useState([])
+    const textAreaRef = React.createRef();
+    const [newTweets, setNewTweets] = useState([]);
     const handleSubmit = (event) => {
-      event.preventDefault()
-      const newVal = textAreaRef.current.value
-      let tempNewTweets = [...newTweets]
+      event.preventDefault();
+      const newVal = textAreaRef.current.value;
+      let tempNewTweets = [...newTweets];
       // change this to a server side call
-      tempNewTweets.unshift({
-        content: newVal,
-        likes: 0,
-        id: 12313
-      })
+      createTweet(newVal, (response, status) => {
+        if (status === 201) {
+          tempNewTweets.unshift({
+            content: newVal,
+            likes: 0,
+            id: 12313
+          });
+        } else {
+          console.log(response)
+          alert("An error occurred. Please try again.")
+        }
+      });
       setNewTweets(tempNewTweets)
       textAreaRef.current.value = ''
-    }
+    };
     return <div className={props.className}>
             <div className='col-12 mb-3'>
               <form onSubmit={handleSubmit}>
@@ -29,7 +36,7 @@ export function TweetsComponent(props) {
             </div>
         <TweetsList newTweets={newTweets} />
     </div>
-}
+};
 
 export function TweetsList(props) {
   const [tweetsInit, setTweetsInit] = useState([]);
@@ -84,7 +91,7 @@ export function ActionBtn(props) {
     }
     const display = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay
     return <button className={className} onClick={handleClick}>{display}</button>
-}
+};
   
 export function Tweet(props) {
     const {tweet} = props
@@ -97,4 +104,4 @@ export function Tweet(props) {
           <ActionBtn tweet={tweet} action={{type: "retweet", display:""}}/>
         </div>
     </div>
-}
+};
