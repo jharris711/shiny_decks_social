@@ -32,29 +32,29 @@ export function TweetsComponent(props) {
 }
 
 export function TweetsList(props) {
-    const [tweetsInit, setTweetsInit] = useState([])
-    const [tweets, setTweets] = useState([])
-    useEffect(()=>{
-      const final = [...props.newTweets].concat(tweetsInit)
-      if (final.length !== tweets.length) {
-        setTweets(final)
-      }
-    }, [props.newTweets, tweets, tweetsInit])
+  const [tweetsInit, setTweetsInit] = useState([]);
+  const [tweets, setTweets] = useState([]);
+  useEffect(()=>{
+    const final = [...props.newTweets].concat(tweetsInit)
+    if (final.length !== tweets.length) {
+      setTweets(final)
+    };
+  }, [props.newTweets, tweets, tweetsInit]);
 
-    useEffect(() => {
-      const myCallback = (response, status) => {
-        if (status === 200){
-          setTweetsInit(response)
-        } else {
-          alert("There was an error")
-        }
+  useEffect(() => {
+    const myCallback = (response, status) => {
+      if (status === 200){
+        setTweetsInit(response)
+      } else {
+        alert("There was an error")
       }
-      loadTweets(myCallback)
-    }, [tweetsInit])
-    return tweets.map((item, index)=>{
-      return <Tweet tweet={item} className='my-5 py-5 border bg-white text-dark' key={`${index}-{item.id}`} />
-    })
-  }
+    };
+    loadTweets(myCallback);
+  }, [tweetsInit]);
+  return tweets.map((item, index)=>{
+    return <Tweet tweet={item} className='my-5 py-5 border bg-white text-dark' key={`${index}-{item.id}`} />
+  });
+};
 
 
 export function ActionBtn(props) {
@@ -80,7 +80,7 @@ export function ActionBtn(props) {
     }
     const display = action.type === 'like' ? `${likes} ${actionDisplay}` : actionDisplay
     return <button className={className} onClick={handleClick}>{display}</button>
-  }
+}
   
 export function Tweet(props) {
     const {tweet} = props
@@ -93,4 +93,4 @@ export function Tweet(props) {
           <ActionBtn tweet={tweet} action={{type: "retweet", display:""}}/>
         </div>
     </div>
-  }
+}

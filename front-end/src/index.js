@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {TweetsComponent} from './tweets'
 import App from './App';
+import {TweetsComponent} from './tweets'
 import * as serviceWorker from './serviceWorker';
 
 const appEl = document.getElementById('root');
